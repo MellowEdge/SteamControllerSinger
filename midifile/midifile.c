@@ -3040,6 +3040,45 @@ int MidiFileVoiceEvent_getChannel(MidiFileEvent_t event)
 	}
 }
 
+int MidiFileVoiceEvent_setChannel(MidiFileEvent_t event, int channel)
+{
+	switch (MidiFileEvent_getType(event))
+	{
+		case MIDI_FILE_EVENT_TYPE_NOTE_OFF:
+		{
+			return MidiFileNoteOffEvent_setChannel(event, channel);
+		}
+		case MIDI_FILE_EVENT_TYPE_NOTE_ON:
+		{
+			return MidiFileNoteOnEvent_setChannel(event, channel);
+		}
+		case MIDI_FILE_EVENT_TYPE_KEY_PRESSURE:
+		{
+			return MidiFileKeyPressureEvent_setChannel(event, channel);
+		}
+		case MIDI_FILE_EVENT_TYPE_CONTROL_CHANGE:
+		{
+			return MidiFileControlChangeEvent_setChannel(event, channel);
+		}
+		case MIDI_FILE_EVENT_TYPE_PITCH_WHEEL:
+		{
+			return MidiFilePitchWheelEvent_setChannel(event, channel);
+		}
+		case MIDI_FILE_EVENT_TYPE_PROGRAM_CHANGE:
+		{
+			return MidiFileProgramChangeEvent_setChannel(event, channel);
+		}
+		case MIDI_FILE_EVENT_TYPE_CHANNEL_PRESSURE:
+		{
+			return MidiFileChannelPressureEvent_setChannel(event, channel);
+		}
+		default:
+		{
+			return -1;
+		}
+	}
+}
+
 int MidiFileVoiceEvent_getDataLength(MidiFileEvent_t event)
 {
 	switch (MidiFileEvent_getType(event))

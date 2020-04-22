@@ -289,6 +289,7 @@ int MidiFileKeySignatureEvent_isMinor(MidiFileEvent_t event);
 int MidiFileKeySignatureEvent_setKeySignature(MidiFileEvent_t event, int number, int minor);
 
 int MidiFileVoiceEvent_getChannel(MidiFileEvent_t event);
+int MidiFileVoiceEvent_setChannel(MidiFileEvent_t event, int channel);
 int MidiFileVoiceEvent_getDataLength(MidiFileEvent_t event);
 unsigned long MidiFileVoiceEvent_getData(MidiFileEvent_t event);
 int MidiFileVoiceEvent_setData(MidiFileEvent_t event, unsigned long data);

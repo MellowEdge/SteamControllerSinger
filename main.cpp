@@ -24,6 +24,8 @@ using namespace std;
 struct ParamsStruct{
     const char* midiSong;
     unsigned int intervalUSec;
+    unsigned int leftHapticChannel;
+    unsigned int rightHapticChannel;
     int libusbDebugLevel;
     bool repeatSong;
 };
@@ -232,8 +234,17 @@ void playSong(SteamControllerInfos* controller,const ParamsStruct params){
             //Get channel event
             int eventChannel = MidiFileVoiceEvent_getChannel(currentEvent);
 
-            //If channel is other than 0 or 1, skip this event, we cannot play it with only 1 steam controller
-            if(eventChannel < 0 || !(eventChannel < CHANNEL_COUNT)) continue;
+            //If channel is other than those set for left or right haptic, skip this event, we cannot play it with only 1 steam controller
+            if(eventChannel < 0 || (eventChannel != params.leftHapticChannel && eventChannel != params.rightHapticChannel)) continue;
+	    //Set the channel of current event to either 0 or 1, so the Steam Controller knows how to play it
+            if (eventChannel == params.leftHapticChannel) {
+               MidiFileVoiceEvent_setChannel(currentEvent, 0);
+             }
+            else { 
+               MidiFileVoiceEvent_setChannel(currentEvent, 1);
+             }
+	    //Update current channel of eventChannel
+            eventChannel = MidiFileVoiceEvent_getChannel(currentEvent);
 
             //If event is note off and does not match previous played event, skip it
             if(MidiFileEvent_isNoteEndEvent(currentEvent)){
@@ -279,7 +290,7 @@ void playSong(SteamControllerInfos* controller,const ParamsStruct params){
 
 bool parseArguments(int argc, char** argv, ParamsStruct* params){
     int c;
-    while ( (c = getopt(argc, argv, "l:i:r")) != -1) {
+    while ( (c = getopt(argc, argv, "l:i:r:t:y")) != -1) {
         unsigned long int value;
 	switch(c){
         case 'l':
@@ -292,6 +303,18 @@ bool parseArguments(int argc, char** argv, ParamsStruct* params){
 	    value = strtoul(optarg,NULL,10);
             if(value <= 1000000 && value > 0){
                 params->intervalUSec = value;
+            }
+            break;
+	case 't':
+	    value = strtoul(optarg,NULL,10);
+            if(value <= 1000000 && value >= 0){
+                params->rightHapticChannel = value;
+            }
+            break;
+        case 'y':
+	    value = strtoul(optarg,NULL,10);
+            if(value <= 1000000 && value >= 0){
+                params->leftHapticChannel = value;
             }
             break;
         case 'r':
@@ -334,12 +357,14 @@ int main(int argc, char** argv)
     params.intervalUSec = DEFAULT_INTERVAL_USEC;
     params.libusbDebugLevel = LIBUSB_LOG_LEVEL_NONE;
     params.repeatSong = false;
+    params.leftHapticChannel = 0;
+    params.rightHapticChannel = 1;
     params.midiSong = "\0";
 
 
     //Parse arguments
     if(!parseArguments(argc, argv, &params)){
-        cout << "Usage : steamcontrollersinger [-r][-lDEBUG_LEVEL] [-iINTERVAL] MIDI_FILE" << endl;
+        cout << "Usage : steamcontrollersinger [-r][-lDEBUG_LEVEL] [-iINTERVAL] [-yLEFT_CH] [-tRIGHT_CH] MIDI_FILE" << endl;
         return 1;
     }
 
