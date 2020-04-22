@@ -1,6 +1,7 @@
 # Steam Controller Singer
 
-This project is a fork of [Pila's SteamControllerSinger](https://gitlab.com/Pilatomic/SteamControllerSinger) including a dirty fix to make the Steam Controller sing again.
+This project is a fork of [Roboron3042's fork](https://github.com/Roboron3042/SteamControllerSinger) of [Pila's SteamControllerSinger](https://gitlab.com/Pilatomic/SteamControllerSinger) including Roboron3042's dirty fix to make the Steam Controller sing again. 
+Also I added the feature to pick which 2 channels will Steam Controller sing, instead of just the first 2, yay!
 
 ## HOW TO
 
@@ -11,16 +12,18 @@ This project is a fork of [Pila's SteamControllerSinger](https://gitlab.com/Pila
 
 ### Where can I find midi songs?
 
-You can find midi songs ready to be played with Steam Controller Singer in my [Personal Collection](https://mega.nz/#F!BWpEWKzB!r7WPw5bZ_domN4pk-FJsjg) (I'll keep updating it with more songs). You can also download midi songs from various websites such [musescore.com](https://musescore.com/), but they may or may not be ready to be played with Steam Controller Singer (see Midi files tips in that case).
+You can find midi songs ready to be played with Steam Controller Singer in my [Roboron3042's Collection](https://mega.nz/#F!BWpEWKzB!r7WPw5bZ_domN4pk-FJsjg). You can also download midi songs from various websites such [musescore.com](https://musescore.com/), but they may or may not be ready to be played with Steam Controller Singer (see Midi files tips in that case).
 
 ### Usage from command prompt:
-	steamcontrollersinger [-r][-l DEBUG_LEVEL] [-i INTERVAL] MIDI_FILE
+	steamcontrollersinger [-r][-l DEBUG_LEVEL] [-i INTERVAL] [-tLEFT_CH] [-yRIGHT_CH] MIDI_FILE
 
 	-i INTERVAL argument to choose player sleep interval (in microseconds). Lower generally means better song fidelity, but higher cpu usage, and at some point goidn lower won't improve any more. Default value is 10000
 
 	-l DEBUG_LEVEL argument to choose libusb debug level. Default is 0, no debug output. max is 4, max verbosity output
 	
 	-r to enable repeat mode, which plays continously (restart the song when finished)
+	
+	-t and -y to enter which channel from midi should play on left/right haptic respectively
 
 ### Midi files tips:
 
@@ -32,6 +35,8 @@ Midi files may need to be edited with a software such [MidiEditor](https://www.m
 * **Avoid multiple notes active at the same time on the same channel**, since haptic actuators can only play one note at the time.
 
 ## CHANGELOG
+[V1.8]
+* Added channel pick feature
 
 [V1.7]
 * Fixed music stopped playing after a few seconds
@@ -57,3 +62,4 @@ Midi files may need to be edited with a software such [MidiEditor](https://www.m
 [V1.2]
 * Fixed being stuck on "Command error" when disconnecting controller while playing. Now continue playing (even if keep failing)
 * Removed the now deprecated 20ms note duration reduction
+
