@@ -7,13 +7,16 @@
 
 #include <signal.h>
 #include <stdio.h>
+#include <windows.h>
+#include <list>
 
 #include "libusb/libusb.h"
 #include "midifile/midifile.h"
 
 #define STEAM_CONTROLLER_MAGIC_PERIOD_RATIO 495483.0
 #define CHANNEL_COUNT                       2
-#define DEFAULT_INTERVAL_USEC               10000
+//#define DEFAULT_INTERVAL_USEC               10000
+#define DEFAULT_INTERVAL_MSEC               10
 
 #define DURATION_MAX        -1
 #define NOTE_STOP           -1
@@ -23,7 +26,7 @@ using namespace std;
 
 struct ParamsStruct{
     const char* midiSong;
-    unsigned int intervalUSec;
+    unsigned int intervalMSec;
     unsigned int leftHapticChannel;
     unsigned int rightHapticChannel;
     int libusbDebugLevel;
@@ -197,7 +200,7 @@ void playSong(SteamControllerInfos* controller,const ParamsStruct params){
 
     //Waiting for user to press enter
     cout << "Starting playback of " <<params.midiSong  << endl;
-    sleep(1);
+    Sleep(1);
 
     //This will contains the previous events accepted for each channel
     MidiFileEvent_t acceptedEventPerChannel[CHANNEL_COUNT] = {0};
@@ -210,7 +213,7 @@ void playSong(SteamControllerInfos* controller,const ParamsStruct params){
     MidiFileEvent_t currentEvent = MidiFile_getFirstEvent(midifile);
     
     while(currentEvent != NULL){
-        usleep(params.intervalUSec);
+        Sleep(params.intervalMSec);
 
         //This will contains the events to play
         MidiFileEvent_t eventsToPlay[CHANNEL_COUNT] = {NULL};
@@ -302,7 +305,7 @@ bool parseArguments(int argc, char** argv, ParamsStruct* params){
         case 'i':
 	    value = strtoul(optarg,NULL,10);
             if(value <= 1000000 && value > 0){
-                params->intervalUSec = value;
+                params->intervalMSec = value;
             }
             break;
 	case 't':
@@ -354,7 +357,7 @@ int main(int argc, char** argv)
     cout <<"Steam Controller Singer by Pila"<<endl;
 
     ParamsStruct params;
-    params.intervalUSec = DEFAULT_INTERVAL_USEC;
+    params.intervalMSec = DEFAULT_INTERVAL_MSEC;
     params.libusbDebugLevel = LIBUSB_LOG_LEVEL_NONE;
     params.repeatSong = false;
     params.leftHapticChannel = 1;
