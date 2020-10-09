@@ -1,14 +1,22 @@
 # Steam Controller Singer
 
 This project is a fork of [Roboron3042's fork](https://github.com/Roboron3042/SteamControllerSinger) of [Pila's SteamControllerSinger](https://gitlab.com/Pilatomic/SteamControllerSinger) including Roboron3042's dirty fix to make the Steam Controller sing again. 
-Also I added the feature to pick which 2 channels will Steam Controller sing, instead of just the first 2, yay!
+Also I added the feature to pick which 2 channels will Steam Controller sing, instead of just the first 2, yay! (Also added windows branch, which pretty much just changes commands associated with time to Windows-like)
 
-## HOW TO
+## HOW TO (On Linux)
 
 1. Turn on your Steam Controller
 2. Drag the midi file onto steamcontrollersinger executable
 3. When prompted, press ENTER
 4. Enjoy!
+
+## HOW TO (Windows binary)
+
+1. Unpack the zip file somewhere
+2. Open folder you unpacked zip file to
+3. Turn on your Steam Controller
+4. Drag the midi file onto SteamCS.exe executable (or open it in console for more settings)
+5. Enjoy!
 
 ### Where can I find midi songs?
 
